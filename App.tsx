@@ -1,22 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Shop from "@screens/Shop";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ItemInfo from "@screens/ItemInfo";
+import linking, {RootStackParamList} from "@routes";
+import {Provider} from "react-redux";
+import {store} from "@store";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export default function App() {
-  const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
-    );
-  }
+  return (
+    <Provider store={store}>
+      <NavigationContainer
+        linking={linking}
+      >
+        <StatusBar
+          style="auto"
+        />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="Shop" component={Shop} />
+          <Stack.Screen name="ItemInfo" component={ItemInfo} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
 }
+
+
